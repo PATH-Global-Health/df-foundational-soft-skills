@@ -2,9 +2,8 @@ project:
   type: book
 
 book:
-  title: "df-foundational-soft-skills"
-  author: "Norah Jones"
-  date: "12/19/2024"
+  title: "Foundational Soft Skills"
+  subtitle: "MACEPA Data Fellowship - Training Materials"
   chapters:
     - index.qmd
     - intro.qmd
