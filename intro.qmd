@@ -1,9 +1,5 @@
-# Introduction
+# Module Content 
 
-This is a book created from markdown and executable code.
+Find below the slide deck for this module - there are several sub topics contained within this work with links to interactive videos and courses included so make sure you take your time and work through all of this.
 
-See @knuth84 for additional discussion of literate programming.
-
-```{r}
-1 + 1
-```
+<iframe src="soft-skills-slides.pdf" width="800" height="600"> </iframe> 
