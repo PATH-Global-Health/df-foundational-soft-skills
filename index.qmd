@@ -1,9 +1,19 @@
-# Preface {.unnumbered}
+# Foundational Soft Skills Module {.unnumbered}
 
-This is a Quarto book.
+Welcome to the Foundational Skills module of the MACEPA Data Fellowship Program. This module is designed to equip fellows with the critical soft skills necessary to succeed in a fast-paced, collaborative, and data-driven environment.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+### What You Will Learn
 
-```{r}
-1 + 1
-```
+Throughout this module, we will explore key competencies required for effective work in MACEPA and beyond, including:
+
+-   **Organizational Structure and Collaboration:** Understanding how to navigate MACEPA's work environment and effectively collaborate with your team and external partners.
+
+-   **Time Management and Prioritization:** Developing strategies to manage competing priorities and deadlines while maintaining productivity.
+
+-   **Feedback Culture:** Mastering the art of giving and receiving feedback to foster professional growth and strengthen team dynamics.
+
+-   **Addressing Common Challenges:** Identifying and overcoming challenges in data and analytics work, from data accessibility to engaging stakeholders.
+
+-   **Effective Communication:** Learning how to convey complex information clearly and impactfully through writing, presentations, and visualizations.
+
+Success in the field of malaria data analytics requires more than technical expertise. It calls for strong interpersonal skills, strategic planning, and effective communication. This module provides a foundation to help you navigate the complexities of your role and make meaningful contributions to the fight against malaria.
