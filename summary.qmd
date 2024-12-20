@@ -1,7 +1,5 @@
-# Summary
+# True Colours Exercise
 
-In summary, this book has no content whatsoever.
+We covered the True Colours Excercise during our Welcome Week sessions - the slides can be found here for your reference.
 
-```{r}
-1 + 1
-```
+<iframe src="true-colours.pdf" width="800" height="600"> </iframe> 
