@@ -2,42 +2,32 @@
 title: "Tutorial - How to turn a bad slide into a good slide"
 ---
 
+```{r echo = FALSE}
+knitr::opts_chunk$set(
+  fig.dpi = 600,   # Set global DPI to 600
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+
+```
+
+
 This tutorial follows on from the How to turn a bad slide into a good slide section of the powerpoint presentation. It will walk through the code used to generate the plots and includes some follow on exercises for you to complete with this same dataset.
 
 ## Libraries and Data Preparation
-
-```{r echo = FALSE, message=FALSE }
-
-# copies of pathtools zambia functions needed for this session to work 
-scale_pop_growth_annual <- function(initial_pop, new_year,
-                                    initial_year = 2020, growth_rate = 1.03) {
-  pop_offset <- growth_rate^(new_year - initial_year)
-  out <- initial_pop * pop_offset
-  return(out)
-}
-
-
-# Load libraries
-library(tidyverse)
-library(scales)
-library(ggpubr)
-
-# Load the data
-dat <- read.csv("monthly-cases.csv")
-
-```
 
 First lets load in the necessary R packages and the dataset for this tutorial - which you can download from the [box folder](https://path.box.com/s/hyieea6hd05ay2xli1hmiz5jinn2h7l6).
 
 ::: callout-tip
 Make sure you save the data in the same folder as your associated R Project for this module.
 
-If you haven't already installed the necessary R packages for this tutorial you will need to call the `r install.packages(" ")` before loading the library.
+If you haven't already installed the necessary R packages for this tutorial you will need to call the install.packages before loading the library.
 
 For help installing `PATHtoolsZambia` see the [package webpage](https://path-global-health.github.io/PATHtoolsZambia/) for more details.
 :::
 
-```{r eval=FALSE}
+```{r message = FALSE, warning=FALSE}
 # Load libraries
 library(tidyverse)
 library(PATHtoolsZambia)
@@ -67,7 +57,7 @@ dat %>% select(-total) %>% map(~ table(.))
 dat$period <- as.Date(dat$period)
 ```
 
-The next step is to aggregate this data up across all of the Districts in Northern Province as we are interested in the Province as a whole, we will also aggregate across `age-groups` so we have the total population level totals for each `data_type`.
+The next step is to aggregate this data up across all of the Districts in Northern Province as we are interested in the Province as a whole, we will also aggregate across `age_groups` so we have the total population level totals for each `data_type`.
 
 ```{r message=FALSE}
 # Summarize data at the province-month level across all age groups
@@ -186,26 +176,8 @@ As noted in the slides, while this plot is a visual improvement on the first we 
 
 To start addressing some of these issues we can add in some additional context to this plot - through using population data we can add in an understanding of how malaria incidence as well as raw case counts are changing over time.
 
-```{r echo = FALSE, message=FALSE, warning=FALSE}
-# Retrieve population data from the PATHToolsZambia package - this is the population totals at the province level for 2022
-pop_northern_2022 <- 
-  read.csv("pop-northern.csv")
 
-# Calculate incidence 
-dat_sum_inc <- 
-  dat_sum %>% 
-  # data is from 2022 so rename column for ease of use
-  mutate(pop_22 = pop_northern_2022) %>% 
-  # extract year data from the period column 
-  mutate(year = year(period)) %>% 
-  # scale the population total data for the years that we are missing this data assuming a population growth rate of 2.8% 
-  mutate(pop = scale_pop_growth_annual(initial_pop = pop_22, new_year = year, initial_year = 2022, growth_rate = 1.028)) %>% 
-  # calculate incidence per 1000 population 
-  mutate(monthly_inc_per_1000 = total / pop * 1000)
-
-```
-
-```{r, eval=FALSE}
+```{r}
 # Retrieve population data from the PATHToolsZambia package - this is the population totals at the province level for 2022
 pop_northern_2022 <- 
   retrieve("province-shp") %>% 
@@ -228,9 +200,10 @@ dat_sum_inc <-
 
 ### Population-Adjusted Plot
 
-We can view this incidence data both as a timeseries and summarised the annual level.
+We can view this incidence data both as a timeseries and summarised at the annual level.
 
 ```{r message=FALSE}
+
 # Create area plot with population-adjusted data
 p1 <- 
   ggplot(dat_sum_inc, aes(x = period, y = monthly_inc_per_1000, fill = nice_names)) + 
@@ -264,13 +237,15 @@ p2 <-
 p_comb <- ggpubr::ggarrange(p1, p2, common.legend = TRUE, legend = "bottom",
                   widths = c(2,1.2))
 
-
+p_comb
 
 ```
 
-The addition of the bar graph makes it easier to see the trends, but would be even easier if we could read off the total incidence on each bar, and it is not necessarily clear to the reader that 2024 only includes 6 months of data.
+The addition of the bar graph makes it easier to see the trends, but would be even easier if we could read off the total incidence on each bar, and it is not necessarily clear to the reader that 2024 only includes 6 months of data. In addition we have cut the title off the plots short with the sizing so lets fix all of that. 
 
-```{r}
+```{r, fig.width=9}
+#| column: page
+
 # calculating bar totals to add to plot - this is the combined total of each of the data_types that year
 dat_sum_inc_annual_tot <- 
   dat_sum_inc_annual %>% 
@@ -282,6 +257,17 @@ dat_sum_inc_annual_tot <-
 
 # Plot these changes 
 p3 <- 
+  ggplot(dat_sum_inc_annual, aes(x = year, y = total_inc, fill = nice_names)) +
+  geom_col() +
+  scale_x_continuous(breaks = 2018:2024) +
+  labs(x = "Year", y = "Annual malaria cases per 1,000 population") +
+  ggtitle("Annual malaria cases per 1,000 \npopulation",
+          subtitle = "Jan 2018 - June 2024") +
+  scale_fill_manual("Data type", values = c("#A5C4D4","#758ECD", "#E3A27F")) +
+  theme_bw()
+
+
+p4 <- 
   ggplot() +
   geom_col(data = dat_sum_inc_annual, aes(x = year, y = total_inc, fill = nice_names)) +
   geom_text(data = dat_sum_inc_annual_tot, aes(x = year, y = total + 25, label = bar_label)) + # include text labels at the top of each bar
@@ -294,7 +280,7 @@ p3 <-
   scale_fill_manual("Data type", values = c("#A5C4D4","#758ECD", "#E3A27F")) +
   theme_bw()
 
-p_comb2 <- ggpubr::ggarrange(p1, p3, common.legend = TRUE, legend = "bottom",
+p_comb2 <- ggpubr::ggarrange(p3, p4, common.legend = TRUE, legend = "bottom",
                             widths = c(2,1.2))
 
 # add a combined figure title 
