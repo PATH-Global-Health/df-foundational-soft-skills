@@ -22,7 +22,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages("quarto", repos = "https://cran.rstudio.com/")'
+          Rscript -e 'install.packages(c("tidyverse", "quarto", "ggpubr", "scales", "sf"), repos = "https://cran.rstudio.com/")'
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
